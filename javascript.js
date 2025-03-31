@@ -1,6 +1,7 @@
 const log = console.log;
 const values = ["rock", "paper", "scissors"];
-
+let humanScore = 0;
+let computerScore = 0;
 
 function getComputerChoice(){
     let val = Math.floor((Math.random() * 3));
