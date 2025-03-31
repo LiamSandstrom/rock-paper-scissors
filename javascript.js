@@ -7,7 +7,6 @@ function getComputerChoice(){
     return values[val];
 }
 
-
 function getHumanChoice(){
     return prompt("What ya got? (rock) (paper) (sicssors)").toLowerCase();
 }
