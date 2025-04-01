@@ -40,14 +40,13 @@ function playRound(){
 
 function getComputerChoice(){
     let val = Math.floor((Math.random() * 3));
-    if(val === 0){
-        return "rock";
-    }
-    else if(val === 1){
-        return "paper";
-    }
-    else{
-        return "scissors";
+    switch (val){
+        case(0):
+            return "rock";
+        case(1):
+            return "paper";
+        case(2): 
+            return "scissors";
     }
 }
 
