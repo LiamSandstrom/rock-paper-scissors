@@ -15,6 +15,7 @@ playGame();
 
 function playGame(){
     for(let i = 0; i < rounds; i++){
+        log("Round: " + (i + 1));
         playRound();
     }
     logResult();
@@ -53,7 +54,12 @@ function getComputerChoice(){
 function getHumanChoice(){
     //input validation 
     while(true){
-        let input = prompt("What ya got? (rock) (paper) (scissors)").toLowerCase();
+        let input = prompt("What ya got? (rock) (paper) (scissors)");
+        if(input === null){
+            log("No input :(");
+            continue;
+        }
+        input = input.toLowerCase();
         if(values.has(input)){
             return input;
         }
