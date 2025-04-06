@@ -63,6 +63,7 @@ button {
     border-radius: 10px;
     background-color: var(--white);
     color: black;
+    transition: transform 0.2s, background-color 0.15s;
 }
 
 .visual-wrapper{

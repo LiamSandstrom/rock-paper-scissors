@@ -7,6 +7,10 @@ values.set("rock", "scissors");
 values.set("paper", "rock");
 values.set("scissors", "paper");
 
+let hover = 0;
+const rotateVal = 0.7;
+const whiteColor = "rgb(242, 239, 239)"; 
+const backColor = "#123456";
 const playerUIScore = document.querySelector("#player-score");
 const computerUIScore = document.querySelector("#computer-score");
 const buttons = document.querySelectorAll("button");
@@ -17,7 +21,9 @@ for(let button of buttons){
     });
 
     button.addEventListener("mouseenter", () => hoverButton(button));
-    button.addEventListener("mouseleave", stopHoverButton);
+    button.addEventListener("mouseleave", () => stopHoverButton(button));
+    button.addEventListener("mousedown", () => buttonDown(button));
+    button.addEventListener("mouseup", () => hoverButton(button));
 }
 
 let humanScore = 0;
@@ -78,10 +84,42 @@ function updateComputerScore(){
 }
 
 function hoverButton(button){
+    hoverButtonTick(button, rotateVal);
+    button.style.backgroundColor = backColor;
+    button.style.color = whiteColor;
+    button.style.border = `2px solid ${whiteColor}`;
 }
 
-function stopHoverButton(){
+async function hoverButtonTick(button, val){
+    if(val > 0){
+        console.log("greater");
+        val = val * -1;
+        button.style.transform = `scale(1.1) rotate(${val}deg)`;
+    }
+    else{
+        console.log("less");
+        val = val * -1;
+        button.style.transform = `scale(1.1) rotate(${val}deg)`;
+    }
+    hover = setTimeout(() => {hoverButtonTick(button, val)}, 170);
 }
+
+function stopHoverButton(button){
+    button.style.transform = "scale(1.0)";
+    button.style.backgroundColor = whiteColor;
+    button.style.color = backColor;
+    button.style.border = "none";
+    clearTimeout(hover);
+}
+
+function buttonDown(button){
+
+    button.style.transform = "scale(1.0)";
+    clearTimeout(hover);
+    button.style.backgroundColor = "rgb(118, 175, 11)";
+}
+
+
 // Plan:
 // Interface: Console
 // Input: rock, paper, scissors
