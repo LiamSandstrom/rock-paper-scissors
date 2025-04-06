@@ -11,8 +11,6 @@ let humanScore = 0;
 let computerScore = 0;
 let rounds = 5;
 
-playGame();
-
 function playGame(){
     for(let i = 0; i < rounds; i++){
         log("Round: " + (i + 1));
@@ -21,8 +19,8 @@ function playGame(){
     logResult();
 }
 
-function playRound(){
-    let player = getHumanChoice();
+function playRound(input){
+    let player = input;
     let computer = getComputerChoice();
 
     if(player === computer){
@@ -50,21 +48,21 @@ function getComputerChoice(){
     }
 }
 
-function getHumanChoice(){
-    //input validation 
-    while(true){
-        let input = prompt("What ya got? (rock) (paper) (scissors)");
-        if(input === null){
-            log("No input :(");
-            continue;
-        }
-        input = input.toLowerCase();
-        if(values.has(input)){
-            return input;
-        }
-        log("Valid input plz");
-    }
-}
+// function getHumanChoice(){
+//     //input validation 
+//     while(true){
+//         let input = prompt("What ya got? (rock) (paper) (scissors)");
+//         if(input === null){
+//             log("No input :(");
+//             continue;
+//         }
+//         input = input.toLowerCase();
+//         if(values.has(input)){
+//             return input;
+//         }
+//         log("Valid input plz");
+//     }
+// }
 
 function logResult(){
     humanScore > computerScore ? log("You Won " + humanScore + " : " + computerScore) : 
