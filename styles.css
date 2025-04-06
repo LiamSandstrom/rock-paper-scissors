@@ -25,6 +25,7 @@ body{
     flex: 0 0 auto;
     border-radius: 10px;
     border: 2px solid var(--white);
+    background-color: #0d2339;
 }
 
 .score-wrapper {
@@ -34,6 +35,8 @@ body{
     align-items: center;
     gap: 30px;
     border: 2px solid var(--white);
+    background-color: #123456;
+    padding: 10px 0;
 }
 
 .score-container {
@@ -74,13 +77,24 @@ button {
 }
 
 .visual {
-    height: 200px;
-    width: 200px;
-    background-color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 240px;
+    width: 240px;
+    background-color: #123456;
+    border-radius: 30px;
+    border: 2px solid var(--white);
 }
 
 #timer {
     width: 70px;
     text-align: center;
     margin: 0 70px;
+}
+
+img {
+    height: 190px;
+    width: auto;
+    opacity: 50%;
 }
