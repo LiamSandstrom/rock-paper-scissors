@@ -8,21 +8,41 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="score-wrapper">
-            <div class="score-container">
-                <h1>Player Health</h1>
-                <h1 id="player-score">100</h1>
+        <div class="info-wrapper">
+            <div class="top-wrapper">
+                <div class="player-container">
+                    <h1>Player</h1>
+                    <h2 id="player-round">0</h2>
+                </div>
+            <div class="round-container">
+                <h2>Round:</h2>
+                <h2 id="round">1</h2>
             </div>
-            <div class="score-container">
-                <h1>Computer Health</h1>
-                <h1 id="computer-score">100</h1>
+                <div class="player-container">
+                    <h1>Computer</h1>
+                    <h2 id="computer-round">0</h2>
+                </div>
             </div>
         </div>
+    <div class="wrapper">
         <div class="visual-wrapper">
-            <div class="visual" id="playervisual"><img src="question-mark.png" alt="Player move image" id="player-image"></div>
+            <div class="visual-container">
+                <div class="score-container">
+                    <h1>Health</h1>
+                    <h1 id="player-score">100</h1>
+                </div>
+                <div class="visual" id="playervisual"><img src="question-mark.png" alt="Player move image" id="player-image"></div>
+            </div>
             <h1 id="timer">VS</h1>
-            <div class="visual" id="computervisual"><img src="question-mark.png" alt="Computer move image" id="computer-image"></div>
+            <div class="visual-container">
+                <div class="score-container">
+                    <h1>Health</h1>
+                    <h1 id="computer-score">100</h1>
+                </div>
+                <div class="visual" id="computervisual">
+                    <img src="question-mark.png" alt="Computer move image" id="computer-image">
+                </div>
+            </div>
         </div>
         <div class="buttons">
             <button value="rock">Rock</button>

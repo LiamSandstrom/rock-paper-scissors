@@ -10,48 +10,105 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     background-color: #123456;
     color: var(--white);
 }
 
 .wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    gap: 100px;
     width: 800px;
-    height: 700px;
+    height: 600px;
     flex: 0 0 auto;
-    border-radius: 10px;
+    border-radius: 40px;
     border: 2px solid var(--white);
     background-color: #0d2339;
     transition: transform 0.2s ease-in-out;
 }
 
-.score-wrapper {
+.round-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-left: 65px;
+    margin-right: 65px;
+}
+
+.info-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
     width: 100%;
+}
+
+.top-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.player-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #0d2339;
+    border: 2px solid var(--white);
+    width: 200px;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.stats-container {
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    gap: 30px;
-    border: 2px solid var(--white);
-    background-color: #123456;
-    padding: 10px 0;
+    justify-items: center;
+    width: 100%;
 }
+.score {
+    display: flex;
+    gap: 10px;
+}
+
 
 .score-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 230px;
+    width: 100px;
+    height: 100%;
+}
+
+.visual-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#player-score, #computer-score{
+    color: rgb(0, 209, 0);
+    transition: transform 0.2s;
 }
 
 h1 {
     margin: 0;
     font-size: 30px;
     font-weight: 500;
+    transition: transform 0.1s, color 0.1s;
+}
+
+h2{
+    margin: 0;
     transition: transform 0.1s, color 0.1s;
 }
 
@@ -92,12 +149,12 @@ button {
 #timer {
     width: 70px;
     text-align: center;
-    margin: 0 70px;
+    margin: 70px 70px 0 70px;
 }
 
 img {
     height: 190px;
     width: auto;
     opacity: 50%;
-    transition: transform 0.2s;
+    transition: transform 1s ease-in-out;
 }
