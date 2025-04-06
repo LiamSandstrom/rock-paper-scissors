@@ -7,6 +7,19 @@ values.set("rock", "scissors");
 values.set("paper", "rock");
 values.set("scissors", "paper");
 
+const playerUIScore = document.querySelector("#player-score");
+const computerUIScore = document.querySelector("#computer-score");
+const buttons = document.querySelectorAll("button");
+for(let button of buttons){
+    button.addEventListener("click", () => {
+        let move = button.value;
+        playRound(move);
+    });
+
+    button.addEventListener("mouseenter", () => hoverButton(button));
+    button.addEventListener("mouseleave", stopHoverButton);
+}
+
 let humanScore = 0;
 let computerScore = 0;
 let rounds = 5;
@@ -28,11 +41,11 @@ function playRound(input){
     }
     else if(values.get(player) === computer){
         log("You Win :) " + player + " beats " + computer);
-        humanScore++;
+        updatePlayerScore();
     } 
     else{
         log("You Lose :( " + computer + " beats " + player);
-        computerScore++;
+        updateComputerScore();
     }
 }
 
@@ -48,30 +61,27 @@ function getComputerChoice(){
     }
 }
 
-// function getHumanChoice(){
-//     //input validation 
-//     while(true){
-//         let input = prompt("What ya got? (rock) (paper) (scissors)");
-//         if(input === null){
-//             log("No input :(");
-//             continue;
-//         }
-//         input = input.toLowerCase();
-//         if(values.has(input)){
-//             return input;
-//         }
-//         log("Valid input plz");
-//     }
-// }
-
 function logResult(){
     humanScore > computerScore ? log("You Won " + humanScore + " : " + computerScore) : 
     humanScore < computerScore ? log("You Lost " + humanScore + " : " + computerScore) : 
     log("Draw " + humanScore + " : " + computerScore);
 }
 
+function updatePlayerScore(){
+    humanScore++;
+    playerUIScore.textContent = humanScore;
+}
 
+function updateComputerScore(){
+    computerScore++;
+    computerUIScore.textContent = computerScore;
+}
 
+function hoverButton(button){
+}
+
+function stopHoverButton(){
+}
 // Plan:
 // Interface: Console
 // Input: rock, paper, scissors
