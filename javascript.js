@@ -20,11 +20,15 @@ const playerRound = document.querySelector("#player-round");
 const computerRound = document.querySelector("#computer-round");
 const buttons = document.querySelectorAll("button");
 
+const damageColor = "rgba(202, 122, 122, 0.65)";
+const healthColor = "rgb(0, 209, 0)";
+const whiteColor = "rgb(242, 239, 239)"; 
+const disabledColor = "rgba(154, 152, 152, 0.75)";
+const backgroundColor = "#123456";
+
 const second = 1000;
 const countdownTime = second * 3;
 const rotateVal = 0.7;
-const whiteColor = "rgb(242, 239, 239)"; 
-const backColor = "#123456";
 let maxHealth = 50;
 let damageAmount = 10;
 let clicked = false;
@@ -175,24 +179,24 @@ async function damage(move, target = "computer"){
 }
 
 async function rockDamage(target, healthTarget) {
-    target.style.backgroundColor = "rgba(202, 122, 122, 0.65)";
+    target.style.backgroundColor = damageColor;
     wrapper.style.transform = "scale(1.05) rotate(5deg)";
     await delay(70);
     wrapper.style.transform = "scale(1.05) rotate(-5deg)";
     await delay(70);
     damageHealth(target, damageAmount);
     wrapper.style.transform = "scale(1.00) rotate(0deg)";
-    target.style.backgroundColor = "#123456";
+    target.style.backgroundColor = backgroundColor;
     await delay(200);
 }
 
 async function paperDamage(target, healthTarget) {
     let slaps = 2;
     for(let i = 0; i < slaps; i++){
-    target.style.backgroundColor = "rgba(202, 122, 122, 0.65)";
+    target.style.backgroundColor = damageColor;
     damageHealth(target, damageAmount / slaps);
     await delay(50);
-    target.style.backgroundColor = "#123456";
+    target.style.backgroundColor = backgroundColor;
     await delay(250);
     }
 }
@@ -200,10 +204,10 @@ async function paperDamage(target, healthTarget) {
 async function scissorDamage(target, healthTarget) {
     let cuts = 4;
     for(let i = 0; i < cuts; i++){
-    target.style.backgroundColor = "rgba(202, 122, 122, 0.65)";
+    target.style.backgroundColor = damageColor;
     await delay(50);
     damageHealth(target, damageAmount / cuts);
-    target.style.backgroundColor = "#123456";
+    target.style.backgroundColor = backgroundColor;
     await delay(40);
     }
 }
@@ -224,10 +228,10 @@ async function damageHealth(target, amount){
     }
     for(let i = 0; i < 2; i++){
         target.style.transform = "scale(0.95)";
-        target.style.color = "rgba(202, 122, 122, 0.65)"
+        target.style.color = damageColor;
         await delay(90);
         target.style.transform = "scale(1.0)";
-        target.style.color = "rgb(0, 209, 0)";
+        target.style.color = healthColor;
         await delay(90);
     }
 }
@@ -236,7 +240,7 @@ async function damageHealth(target, amount){
 //-----------------------------------
 function hoverButton(button){
     hoverButtonTick(button, rotateVal);
-    button.style.backgroundColor = backColor;
+    button.style.backgroundColor = backgroundColor;
     button.style.color = whiteColor;
     button.style.border = `2px solid ${whiteColor}`;
     let move = button.value;
@@ -262,7 +266,7 @@ async function hoverButtonTick(button, val){
 function stopHoverButton(button){
     button.style.transform = "scale(1.0)";
     button.style.backgroundColor = whiteColor;
-    button.style.color = backColor;
+    button.style.color = backgroundColor;
     button.style.border = "none";
     clearTimeout(hover);
     resetImage("player");
@@ -271,14 +275,14 @@ function stopHoverButton(button){
 function buttonDown(button){
     button.style.transform = "scale(1.0)";
     clearTimeout(hover);
-    button.style.backgroundColor = "rgb(118, 175, 11)";
+    button.style.backgroundColor = healthColor;
 }
 
 function enableButtons(){
     for(let button of buttons){
         button.disabled = false;
         button.style.pointerEvents = "auto";
-        button.style.backgroundColor = "rgb(242, 239, 239)";
+        button.style.backgroundColor = whiteColor;
     }
 }
 
@@ -286,7 +290,7 @@ function disableButtons(){
     for(let button of buttons){
         button.style.pointerEvents = "none";
         button.disabled = true;
-        button.style.backgroundColor = "rgba(154, 152, 152, 0.75)";
+        button.style.backgroundColor = disabledColor;
     }
 }
 
@@ -335,7 +339,7 @@ async function roundAnimation(target){
     target.style.color = "green";
     await delay(200);
     target.style.transform = "scale(1.0)";
-    target.style.color = "rgb(242, 239, 239)";
+    target.style.color = whiteColor;
 }
 
 //IMAGE FUNCTIONS
