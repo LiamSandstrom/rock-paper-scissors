@@ -1,20 +1,12 @@
 //for easier log while coding
 const log = console.log;
-
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 //HashMap with <Move : beats>
 const values = new Map();
 values.set("rock", "scissors");
 values.set("paper", "rock");
 values.set("scissors", "paper");
 
-let maxHealth = 50;
-let damageAmount = 10;
-let clicked = false;
-let hover = 0;
-let countdownTimer = 0;
-const rotateVal = 0.7;
-const whiteColor = "rgb(242, 239, 239)"; 
-const backColor = "#123456";
 const playerUIScore = document.querySelector("#player-score");
 const computerUIScore = document.querySelector("#computer-score");
 const playerImage = document.querySelector("#player-image");
@@ -27,7 +19,23 @@ const roundUI = document.querySelector("#round");
 const playerRound = document.querySelector("#player-round");
 const computerRound = document.querySelector("#computer-round");
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const second = 1000;
+const countdownTime = second * 3;
+const rotateVal = 0.7;
+const whiteColor = "rgb(242, 239, 239)"; 
+const backColor = "#123456";
+let maxHealth = 50;
+let damageAmount = 10;
+let clicked = false;
+let hover = 0;
+let countdownTimer = 0;
+let playerHealth = maxHealth;
+let computerHealth = maxHealth;
+let playerScore = 0;
+let computerScore = 0;
+let round = 1;
+let idlePlayer;
+let idleComputer;
 
 const buttons = document.querySelectorAll("button");
 for(let button of buttons){
@@ -41,15 +49,6 @@ for(let button of buttons){
     button.addEventListener("mousedown", () => buttonDown(button));
     button.addEventListener("mouseup", () => hoverButton(button));
 }
-const second = 1000;
-let playerHealth = maxHealth;
-let computerHealth = maxHealth;
-let playerScore = 0;
-let computerScore = 0;
-let round = 1;
-const countdownTime = second * 3;
-let idlePlayer;
-let idleComputer;
 
 function beginPlay(){
     playerUIScore.textContent = playerHealth;
@@ -61,10 +60,10 @@ function beginPlay(){
 beginPlay();
 
 function countdown(move){
-    disableButtons();
     updateImage(move, "player");
     clicked = true;
-    stopidleImage();
+    disableButtons();
+    stopidleImagePlayer();
     setTimeout(() => playRound(move), countdownTime);
     let val = countdownTime / second;
     timerText.textContent = val;
@@ -74,7 +73,10 @@ function countdown(move){
 async function playRound(input){
     let player = input;
     let computer = getComputerChoice();
+
+    stopIdleImageComputer();
     updateImage(computer);
+
     if(player === computer){
         log("draw");
         await drawAnimation();
@@ -106,6 +108,7 @@ async function playRound(input){
         round++;
         roundUI.textContent = round;
     }
+
     resetRound();
 }
 
@@ -119,98 +122,6 @@ function getComputerChoice(){
         case(2): 
             return "scissors";
     }
-}
-
-function logResult(){
-    playerHealth > computerHealth ? log("You Won " + playerHealth + " : " + computerHealth) : 
-    playerHealth < computerHealth ? log("You Lost " + playerHealth + " : " + computerHealth) : 
-    log("Draw " + playerHealth + " : " + computerHealth);
-}
-
-function updatePlayerScore(){
-    playerHealth++;
-    playerUIScore.textContent = playerHealth;
-}
-
-function updatecomputerHealth(){
-    computerHealth++;
-    computerUIScore.textContent = computerHealth;
-}
-
-function hoverButton(button){
-    hoverButtonTick(button, rotateVal);
-    button.style.backgroundColor = backColor;
-    button.style.color = whiteColor;
-    button.style.border = `2px solid ${whiteColor}`;
-    let move = button.value;
-    updateImage(move,"player", "20%");
-}
-
-async function hoverButtonTick(button, val){
-    if(val > 0){
-        val = val * -1;
-        button.style.transform = `scale(1.1) rotate(${val}deg)`;
-    }
-    else{
-        val = val * -1;
-        button.style.transform = `scale(1.1) rotate(${val}deg)`;
-    }
-    hover = setTimeout(() => {hoverButtonTick(button, val)}, 170);
-}
-
-function stopHoverButton(button){
-    button.style.transform = "scale(1.0)";
-    button.style.backgroundColor = whiteColor;
-    button.style.color = backColor;
-    button.style.border = "none";
-    clearTimeout(hover);
-    resetImage("player");
-}
-
-function buttonDown(button){
-    button.style.transform = "scale(1.0)";
-    clearTimeout(hover);
-    button.style.backgroundColor = "rgb(118, 175, 11)";
-}
-
-function updateImage(move, target = "", opacity = "100%"){
-    if(target === "player"){
-        if(clicked === true) return;
-        target = playerImage;
-    }
-    else{
-        target = computerImage;
-    }
-    target.src = `${move}.png`;
-    target.style.opacity = opacity;
-}
-
-function resetImage(target = "computer"){
-    if(clicked === true) return;
-    if(target === "player"){
-        target = playerImage;
-        target.style.opacity = "0%";
-    }
-    else{
-        target = computerImage;
-        target.style.opacity = "50%";
-        target.src = "question-mark.png";
-    }
-}
-
-async function updateCountdownText(){
-    let val = Number.parseInt(timerText.textContent);
-    val -= 1;
-    if(val === 0){
-        timerText.textContent = "VS";
-        resetTimer();
-        return;
-    }
-    timerText.textContent = val;
-}
-
-function resetTimer(){
-    clearInterval(countdownTimer);
 }
 
 async function resetRound(){
@@ -227,34 +138,13 @@ async function resetRound(){
     enableButtons();
 }
 
-function playAnimation(){
-    playerImage.style.transform = "scale(1.1)";
-    computerImage.style.transform = "scale(1.1)";
-}
-
-async function winAnimation(move){
-    await delay(700);
-    playerImage.style.transform = "scale(1.2)";
-    await delay(500);
-    await damage(move);
-}
-
-async function loseAnimation(move){
-    await delay(700);
-    computerImage.style.transform = "scale(1.2)";
-    await delay(500);
-    await damage(move, "player");
-}
-
-async function drawAnimation(){
-    await delay(700);
-    playAnimation();
-    await delay(500);
-}
-
-function resetScale(){
-    playerImage.style.transform = "scale(1.0)";
-    computerImage.style.transform = "scale(1.0)";
+function resetGame(){
+    playerHealth = maxHealth;
+    computerHealth = maxHealth;
+    playerUIScore.textContent = maxHealth;
+    computerUIScore.textContent = maxHealth;
+    round = 1;
+    roundUI.textContent = round;
 }
 
 async function damage(move, target = "computer"){
@@ -314,22 +204,6 @@ async function scissorDamage(target, healthTarget) {
     }
 }
 
-function enableButtons(){
-    for(let button of buttons){
-        button.disabled = false;
-        button.style.pointerEvents = "auto";
-        button.style.backgroundColor = "rgb(242, 239, 239)";
-    }
-}
-
-function disableButtons(){
-    for(let button of buttons){
-        button.disabled = true;
-        button.style.pointerEvents = "none";
-        button.style.backgroundColor = "rgba(154, 152, 152, 0.75)";
-    }
-}
-
 async function damageHealth(target, amount){
     let health;
     if(target === playerVisual){
@@ -354,6 +228,133 @@ async function damageHealth(target, amount){
     }
 }
 
+function hoverButton(button){
+    hoverButtonTick(button, rotateVal);
+    button.style.backgroundColor = backColor;
+    button.style.color = whiteColor;
+    button.style.border = `2px solid ${whiteColor}`;
+    let move = button.value;
+    updateImage(move,"player", "20%");
+}
+
+async function hoverButtonTick(button, val){
+    if(clicked){
+        stopHoverButton(button);
+        return;
+    }
+    if(val > 0){
+        val = val * -1;
+        button.style.transform = `scale(1.1) rotate(${val}deg)`;
+    }
+    else{
+        val = val * -1;
+        button.style.transform = `scale(1.1) rotate(${val}deg)`;
+    }
+    hover = setTimeout(() => {hoverButtonTick(button, val)}, 170);
+}
+
+function stopHoverButton(button){
+    button.style.transform = "scale(1.0)";
+    button.style.backgroundColor = whiteColor;
+    button.style.color = backColor;
+    button.style.border = "none";
+    clearTimeout(hover);
+    resetImage("player");
+}
+
+function buttonDown(button){
+    button.style.transform = "scale(1.0)";
+    clearTimeout(hover);
+    button.style.backgroundColor = "rgb(118, 175, 11)";
+}
+
+function updateImage(move, target = "", opacity = "100%"){
+    if(target === "player"){
+        if(clicked === true) return;
+        target = playerImage;
+    }
+    else{
+        target = computerImage;
+    }
+    target.src = `${move}.png`;
+    target.style.opacity = opacity;
+}
+
+function enableButtons(){
+    for(let button of buttons){
+        button.disabled = false;
+        button.style.pointerEvents = "auto";
+        button.style.backgroundColor = "rgb(242, 239, 239)";
+    }
+}
+
+function disableButtons(){
+    for(let button of buttons){
+        button.style.pointerEvents = "none";
+        button.disabled = true;
+        button.style.backgroundColor = "rgba(154, 152, 152, 0.75)";
+    }
+}
+
+function resetImage(target = "computer"){
+    if(clicked === true) return;
+    if(target === "player"){
+        target = playerImage;
+        target.style.opacity = "0%";
+    }
+    else{
+        target = computerImage;
+        target.style.opacity = "50%";
+        target.src = "question-mark.png";
+    }
+}
+
+async function updateCountdownText(){
+    let val = Number.parseInt(timerText.textContent);
+    val -= 1;
+    if(val === 0){
+        timerText.textContent = "VS";
+        resetTimer();
+        return;
+    }
+    timerText.textContent = val;
+}
+
+function resetTimer(){
+    clearInterval(countdownTimer);
+}
+
+async function winAnimation(move){
+    await delay(700);
+    playerImage.style.transform = "scale(1.2)";
+    await delay(500);
+    await damage(move);
+}
+
+async function loseAnimation(move){
+    await delay(700);
+    computerImage.style.transform = "scale(1.2)";
+    await delay(500);
+    await damage(move, "player");
+}
+
+async function drawAnimation(){
+    await delay(700);
+    playerImage.style.transform = "scale(1.1)";
+    computerImage.style.transform = "scale(1.1)";
+    await delay(500);
+}
+
+function resetScale(){
+    playerImage.style.transform = "scale(1.0)";
+    computerImage.style.transform = "scale(1.0)";
+}
+
+function setTransitionAll(){
+    playerImage.style.transition = "transform 1s ease-in-out";
+    computerImage.style.transition = "transform 1s ease-in-out";
+}
+
 function startIdleImage(target){
     if(target === playerImage){
         idlePlayer = setInterval(() => idleImage(target), 1000);
@@ -363,33 +364,22 @@ function startIdleImage(target){
     }
 }
 
-function setTransitionAll(){
-    playerImage.style.transition = "transform 1s ease-in-out";
-    computerImage.style.transition = "transform 1s ease-in-out";
-}
-
 async function idleImage(target){
     target.style.transform = "scale(0.95)";
     await delay(500);
     target.style.transform = "scale(1)";
 }
 
-function stopidleImage(){
+function stopidleImagePlayer(){
     clearInterval(idlePlayer);
-    clearInterval(idleComputer);
     playerImage.style.transition = "transform 0.2s";
-    computerImage.style.transition = "transform 0.2s";
     playerImage.style.transform = "scale(1.0)";
-    computerImage.style.transform = "scale(1.0)";
 }
 
-function resetGame(){
-    playerHealth = maxHealth;
-    computerHealth = maxHealth;
-    playerUIScore.textContent = maxHealth;
-    computerUIScore.textContent = maxHealth;
-    round = 1;
-    roundUI.textContent = round;
+function stopIdleImageComputer(){
+    clearInterval(idleComputer);
+    computerImage.style.transition = "transform 0.2s";
+    computerImage.style.transform = "scale(1.0)";
 }
 
 async function roundAnimation(target){
