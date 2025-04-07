@@ -18,6 +18,7 @@ const wrapper = document.querySelector(".wrapper");
 const roundUI = document.querySelector("#round");
 const playerRound = document.querySelector("#player-round");
 const computerRound = document.querySelector("#computer-round");
+const buttons = document.querySelectorAll("button");
 
 const second = 1000;
 const countdownTime = second * 3;
@@ -37,7 +38,6 @@ let round = 1;
 let idlePlayer;
 let idleComputer;
 
-const buttons = document.querySelectorAll("button");
 for(let button of buttons){
     button.addEventListener("click", () => {
         let move = button.value;
@@ -59,6 +59,8 @@ function beginPlay(){
 
 beginPlay();
 
+//GAME LOOP
+//-----------------------------------
 function countdown(move){
     updateImage(move, "player");
     clicked = true;
@@ -147,6 +149,8 @@ function resetGame(){
     roundUI.textContent = round;
 }
 
+//DAMAGE FUNCTIONS
+//-----------------------------------
 async function damage(move, target = "computer"){
     let healthTarget;
     if(target === "player"){
@@ -228,6 +232,8 @@ async function damageHealth(target, amount){
     }
 }
 
+//BUTTON FUNCTIONS
+//-----------------------------------
 function hoverButton(button){
     hoverButtonTick(button, rotateVal);
     button.style.backgroundColor = backColor;
@@ -268,18 +274,6 @@ function buttonDown(button){
     button.style.backgroundColor = "rgb(118, 175, 11)";
 }
 
-function updateImage(move, target = "", opacity = "100%"){
-    if(target === "player"){
-        if(clicked === true) return;
-        target = playerImage;
-    }
-    else{
-        target = computerImage;
-    }
-    target.src = `${move}.png`;
-    target.style.opacity = opacity;
-}
-
 function enableButtons(){
     for(let button of buttons){
         button.disabled = false;
@@ -296,19 +290,8 @@ function disableButtons(){
     }
 }
 
-function resetImage(target = "computer"){
-    if(clicked === true) return;
-    if(target === "player"){
-        target = playerImage;
-        target.style.opacity = "0%";
-    }
-    else{
-        target = computerImage;
-        target.style.opacity = "50%";
-        target.src = "question-mark.png";
-    }
-}
-
+//TIMER FUNCTIONS 
+//-----------------------------------
 async function updateCountdownText(){
     let val = Number.parseInt(timerText.textContent);
     val -= 1;
@@ -324,6 +307,8 @@ function resetTimer(){
     clearInterval(countdownTimer);
 }
 
+//IMAGE AND TEXT ANIMATIONS
+//-----------------------------------
 async function winAnimation(move){
     await delay(700);
     playerImage.style.transform = "scale(1.2)";
@@ -345,6 +330,16 @@ async function drawAnimation(){
     await delay(500);
 }
 
+async function roundAnimation(target){
+    target.style.transform = "scale(1.1)";
+    target.style.color = "green";
+    await delay(200);
+    target.style.transform = "scale(1.0)";
+    target.style.color = "rgb(242, 239, 239)";
+}
+
+//IMAGE FUNCTIONS
+//-----------------------------------
 function resetScale(){
     playerImage.style.transform = "scale(1.0)";
     computerImage.style.transform = "scale(1.0)";
@@ -370,6 +365,31 @@ async function idleImage(target){
     target.style.transform = "scale(1)";
 }
 
+function updateImage(move, target = "", opacity = "100%"){
+    if(target === "player"){
+        if(clicked === true) return;
+        target = playerImage;
+    }
+    else{
+        target = computerImage;
+    }
+    target.src = `${move}.png`;
+    target.style.opacity = opacity;
+}
+
+function resetImage(target = "computer"){
+    if(clicked === true) return;
+    if(target === "player"){
+        target = playerImage;
+        target.style.opacity = "0%";
+    }
+    else{
+        target = computerImage;
+        target.style.opacity = "50%";
+        target.src = "question-mark.png";
+    }
+}
+
 function stopidleImagePlayer(){
     clearInterval(idlePlayer);
     playerImage.style.transition = "transform 0.2s";
@@ -382,13 +402,6 @@ function stopIdleImageComputer(){
     computerImage.style.transform = "scale(1.0)";
 }
 
-async function roundAnimation(target){
-    target.style.transform = "scale(1.1)";
-    target.style.color = "green";
-    await delay(200);
-    target.style.transform = "scale(1.0)";
-    target.style.color = "rgb(242, 239, 239)";
-}
 
 // Plan:
 // Interface: Console
